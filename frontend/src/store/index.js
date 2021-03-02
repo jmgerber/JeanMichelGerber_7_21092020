@@ -1,50 +1,51 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios';
+import router from '../router'
+import axios from "axios"
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    apiUrl: "http://localhost:3000/api",
-    users: {},
-    signupForm: {
-      lastName: null,
-      firstName: null,
-      email: null,
-      password: null,
-    },
-    loginForm: {
-      email: null,
-      password: null,
-    }
+    userId: localStorage.getItem('user'),
+    posts: {},
+    errorMsg: null,
+  },
+  getters: {
+    showPosts: (state) => state.posts,
   },
   mutations: {
-    setUser: (state, users) => (state.users = users),
+    setUserId: (state, userId) => (state.userId = userId),
+    setPosts: (state, posts) => (state.posts = posts),
     updateSignupForm: (state, values) => (state.signupForm = values),
-    updateLoginForm: (state, values) => (state.loginForm = values)
+    updateLoginForm: (state, values) => (state.loginForm = values),
   },
   actions: {
-    getOneUser({ commit }) {
-      axios.post(`${this.state.apiUrl}/auth/login`, this.state.loginForm)
+    getUser({ commit }, userId) {
+      commit('setUserId', userId);
+    },
+    disconnectUser({ commit }) {
+      commit('setUserId', null);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      if (router.options.base != '/') {
+        router.push('/');
+      }
+    },
+    createPost() {
+      axios.post(`/posts`, { img_url: "images/orange.jpg", user_id: 4 })
         .then(res => {
-          console.log(res.data);
-          commit("setUser", res.data);
-        })
-        .catch((error) => {
-          console.log(error);
+          console.log(res);
         })
     },
-    saveUser() {
-      console.log(this.state.signupForm);
-      axios.post(`${this.state.apiUrl}/auth/signup`, this.state.signupForm)
-        .then(response => {
-          console.log(response);
+    getPosts({ commit }) {
+      axios.get(`/posts`)
+        .then(res => {
+          commit("setPosts", res.data);
         })
         .catch((error) => {
           console.log(error);
         })
-
     }
   },
   modules: {

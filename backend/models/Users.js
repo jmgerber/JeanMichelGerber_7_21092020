@@ -6,13 +6,19 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    firstName: {
+    firstname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /[A-Z\-]{2,}/gi
+      }
     },
-    lastName: {
+    lastname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /[A-Z\-]{2,}/gi
+      }
     },
     avatar_url: {
       type: DataTypes.STRING,
@@ -22,7 +28,10 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true
+      }
     },
     password: {
       type: DataTypes.STRING,
@@ -34,7 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   },
-    { timestamps: false }
+    {
+      timestamps: false,
+      tableName: 'users'
+    }
   );
   return User;
 }

@@ -5,6 +5,8 @@ const helmet = require('helmet');
 
 
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+
 
 const app = express();
 app.disable("x-powered-by");
@@ -21,5 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/api/auth', userRoutes);
+app.use('/api/', postRoutes);
 
 module.exports = app;

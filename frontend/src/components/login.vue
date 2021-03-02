@@ -1,16 +1,19 @@
 <template>
   <section id="login-container">
-    <p>Bienvenue sur le réseau social interne de Groupomania !</p>
+    <h1>Bienvenue sur le réseau social interne de Groupomania !</h1>
     <div id="login-form">
       <h2>Connexion</h2>
-      <form method="post" @submit.prevent="getOneUser">
+      <form method="post" @submit.prevent="loginUser">
         <p class="input-container">
           <label for="email">Email</label><br />
-          <input type="text" name="email" v-model="loginForm.email" />
+          <input type="text" name="email" v-model="email" />
         </p>
         <p class="input-container">
           <label for="password">Mot de passe</label><br />
-          <input type="password" name="password" v-model="loginForm.password" />
+          <input type="password" name="password" v-model="password" />
+        </p>
+        <p class="error-login" v-if="this.$store.state.errorMsg != null">
+          {{ this.$store.state.errorMsg }}
         </p>
         <button type="submit">Se connecter</button>
         <p class="no-account">Pas de compte ?</p>
@@ -25,37 +28,50 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import axios from "axios";
 
 export default {
   name: "Login",
-  computed: {
-    loginForm: {
-      get() {
-        return this.$store.state.loginForm;
-      },
-      set(values) {
-        this.$store.commit("updateLoginForm", values);
-      },
-    },
+  data() {
+    return {
+      email: "",
+      password: "",
+    };
   },
   methods: {
-    ...mapActions(["getOneUser"]),
+    loginUser() {
+      axios
+        .post("auth/login", {
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", res.data.userId);
+          this.$store.dispatch("getUser", res.data.userId);
+          this.email = this.password = null;
+        })
+        .catch((error) => {
+          this.password = null;
+          this.$store.state.errorMsg =
+            "Le mot de passe ou l'email est incorrect";
+          console.log(error);
+        });
+    },
+  },
+  mounted() {
+    this.email = null;
+    this.$store.state.errorMsg = null;
   },
 };
 </script>
 
 <style lang="scss">
-#login-container {
-  width: 60%;
-  height: calc(100vh - 78px);
-  margin: 0 auto;
-  background-color: rgba(255, 255, 255, 0.97);
-  & > p {
-    text-align: center;
-    font-size: 1.5rem;
-    padding-top: 15px;
-  }
+#login-container > h1 {
+  text-align: center;
+  font-size: 1.6rem;
+  padding-top: 15px;
+  font-weight: 400;
 }
 
 #login-form {
@@ -64,6 +80,7 @@ export default {
   width: 60%;
   margin: 20px auto 0;
   h2 {
+    margin: 0;
     text-align: center;
     color: #fff;
     border-radius: 1rem 1rem 0 0;
@@ -78,6 +95,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px 0 30px;
     .input-container {
       margin-bottom: 12px;
       width: 66%;
@@ -98,6 +116,9 @@ export default {
         border: none;
         outline: none;
       }
+    }
+    .error-login {
+      color: rgb(206, 21, 21);
     }
     button {
       color: #fff;
@@ -125,7 +146,6 @@ export default {
       background-color: #fff;
       padding: 10px 30px;
       font-size: 1.1rem;
-      margin-bottom: 20px;
       border: none;
       border-radius: 1rem;
       box-shadow: 0 0 5px rgba(0, 0, 0, 0.75);

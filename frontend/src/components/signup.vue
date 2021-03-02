@@ -1,47 +1,148 @@
 <template>
   <section id="signup-container">
-    <form class="signup-form" method="post" @submit.prevent="saveUser">
-      <p>
-        <label for="lastName">Nom : </label>
-        <input type="text" name="lastName" v-model="form.lastName" />
-      </p>
-      <p>
-        <label for="firstName">Prénom : </label>
-        <input type="text" name="firstName" v-model="form.firstName" />
-      </p>
-      <p>
-        <label for="email">Mail : </label>
-        <input type="text" name="email" v-model="form.email" />
-      </p>
-      <p>
-        <label for="password">Mot de passe : </label>
-        <input type="password" name="password" v-model="form.password" />
-      </p>
-      <button type="submit">S'inscrire</button>
-    </form>
+    <h1>
+      Venez partager et réagir aux meilleures trouvailles d'Internet entre
+      collègues !
+    </h1>
+    <div id="signup-form">
+      <h2>Inscription</h2>
+      <form method="post" @submit.prevent="saveUser">
+        <div class="names">
+          <p class="input-container">
+            <label for="lastName">Nom</label>
+            <input type="text" name="lastName" v-model="lastname" />
+          </p>
+          <p class="input-container">
+            <label for="firstName">Prénom</label>
+            <input type="text" name="firstName" v-model="firstname" />
+          </p>
+        </div>
+        <p class="input-container">
+          <label for="email">Email</label>
+          <input type="text" name="email" v-model="email" />
+        </p>
+        <p class="input-container">
+          <label for="password">Mot de passe</label>
+          <input type="password" name="password" v-model="password" />
+        </p>
+        <p class="error-signup" v-if="this.$store.state.errorMsg != null">
+          {{ this.$store.state.errorMsg }}
+        </p>
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
   </section>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import axios from "axios";
+import router from "../router";
 
 export default {
   name: "Signup",
-  computed: {
-    form: {
-      get() {
-        return this.$store.state.signupForm;
-      },
-      set(values) {
-        this.$store.commit("updateSignupForm", values);
-      },
-    },
+  data() {
+    return {
+      firstname: null,
+      lastname: null,
+      email: null,
+      password: null,
+    };
   },
   methods: {
-    ...mapActions(["saveUser"]),
+    saveUser() {
+      axios
+        .post(`/auth/signup`, {
+          firstname: this.firstname,
+          lastname: this.lastname,
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$store.state.errorMsg = "Cet email est déjà utilisé";
+        });
+    },
+  },
+  mounted() {
+    this.$store.state.errorMsg = null;
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+#signup-container > h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  padding-top: 15px;
+  font-weight: 500;
+}
+
+#signup-form {
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.18);
+  width: 60%;
+  margin: 20px auto 0;
+  h2 {
+    text-align: center;
+    color: #fff;
+    border-radius: 1rem 1rem 0 0;
+    background-color: rgba(253, 81, 1, 0.8);
+    padding: 10px 0;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .names {
+      display: flex;
+      justify-content: space-between;
+      width: 70%;
+      .input-container {
+        width: 48%;
+      }
+    }
+    .input-container {
+      margin-bottom: 12px;
+      width: 70%;
+      label {
+        font-weight: 500;
+      }
+      input {
+        font-family: "Roboto", sans-serif;
+        box-sizing: border-box;
+        margin-top: 3px;
+        width: 100%;
+        height: 32px;
+        font-size: 1rem;
+        border-radius: 1rem;
+        padding-left: 12px;
+        font-weight: 400;
+        border: none;
+        outline: none;
+      }
+    }
+    .error-signup {
+      color: rgb(206, 21, 21);
+    }
+    button {
+      color: #fff;
+      background-color: rgba(253, 81, 1, 0.8);
+      padding: 10px 24px;
+      font-size: 1.1rem;
+      border-radius: 1rem;
+      border: none;
+      margin: 10px 0 40px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  }
+}
 </style>
