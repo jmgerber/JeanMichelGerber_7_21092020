@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     avatar_url: {
       type: DataTypes.STRING,
-      defaultValue: 'images/default_picture.png',
+      defaultValue: 'http://localhost:3000/images/default_picture.jpg',
       allowNull: false
     },
     email: {
@@ -48,5 +48,15 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'users'
     }
   );
+
+  User.associate = models => {
+    User.hasMany(models.Post, {
+      onDelete: "cascade",
+      foreignKeys: {
+        allowNull: false
+      }
+    });
+  };
+
   return User;
 }

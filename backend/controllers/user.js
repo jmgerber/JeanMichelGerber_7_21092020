@@ -48,3 +48,11 @@ exports.login = (req, res, next) => {
       console.log(error);
     })
 };
+
+exports.getOneUser = (req, res, next) => {
+  User.findOne({ where: { id: req.body.id } })
+    .then(user => res.status(200).json(user))
+    .catch((error) => {
+      console.log(error)
+    })
+}

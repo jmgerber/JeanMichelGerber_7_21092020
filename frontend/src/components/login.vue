@@ -48,7 +48,7 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", res.data.userId);
-          this.$store.dispatch("getUser", res.data.userId);
+          this.$store.dispatch("getUserId", res.data.userId);
           this.email = this.password = null;
         })
         .catch((error) => {

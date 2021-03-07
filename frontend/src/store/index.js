@@ -8,45 +8,74 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     userId: localStorage.getItem('user'),
-    posts: {},
+    connectedUser: null,
+    posts: null,
     errorMsg: null,
   },
   getters: {
+    showConnectedUser: (state) => state.connectedUser,
     showPosts: (state) => state.posts,
   },
   mutations: {
     setUserId: (state, userId) => (state.userId = userId),
+    setConnectedUser: (state, user) => (state.connectedUser = user),
     setPosts: (state, posts) => (state.posts = posts),
-    updateSignupForm: (state, values) => (state.signupForm = values),
-    updateLoginForm: (state, values) => (state.loginForm = values),
   },
   actions: {
-    getUser({ commit }, userId) {
+    getUserId({ commit }, userId) {
       commit('setUserId', userId);
+    },
+    getOneUser({ commit }) {
+      axios.post('auth/user', { id: this.state.userId })
+        .then(res => {
+          commit('setConnectedUser', res.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     },
     disconnectUser({ commit }) {
       commit('setUserId', null);
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      commit('setConnectedUser', null);
+      localStorage.clear();
       if (router.options.base != '/') {
         router.push('/');
       }
     },
     createPost() {
-      axios.post(`/posts`, { img_url: "images/orange.jpg", user_id: 4 })
-        .then(res => {
-          console.log(res);
-        })
+      console.log("J'envoie !");
+      // axios.post('/posts', { img_url: "http://localhost:3000/images/img-test.png", UserId: this.state.userId })
+      //   .then(res => {
+      //     console.log(res);
+      //     this.dispatch('getPosts');
+      //   })
+      //   .catch(error => {
+      //     console.log(error)
+      //   })
     },
     getPosts({ commit }) {
-      axios.get(`/posts`)
+      axios.get('/posts')
         .then(res => {
           commit("setPosts", res.data);
         })
         .catch((error) => {
           console.log(error);
         })
-    }
+    },
+    likePost(res, payload) {
+      axios
+        .post("/posts/like", {
+          postId: payload.id,
+          userId: parseInt(this.state.userId),
+          likeValue: payload.likeValue
+        })
+        .then(() => {
+          this.dispatch('getPosts');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   modules: {
   }

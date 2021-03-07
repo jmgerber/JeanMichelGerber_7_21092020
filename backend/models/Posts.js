@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       allowNull: false
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     likes: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
@@ -35,5 +31,19 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'posts'
     }
   );
+  Post.associate = models => {
+    Post.belongsTo(models.User, {
+      foreignerKey: {
+        allowNull: false
+      }
+    });
+  };
+
+  Post.addScope('formatted_date', {
+    attributes: {
+      include: [[sequelize.fn('date_format', sequelize.col('date_publication'), '%Y-%m-%d %H:%i'), 'formatted_date']]
+    }
+  });
+
   return Post;
 }
