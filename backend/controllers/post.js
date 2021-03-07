@@ -19,8 +19,8 @@ exports.getPosts = (req, res) => {
 
 exports.createPost = (req, res) => {
   const newPost = {
-    img_url: req.body.img_url,
-    UserId: req.body.UserId
+    img_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    UserId: req.body.userId
   }
   Post.create(newPost)
     .then(post => res.status(200).json(post))

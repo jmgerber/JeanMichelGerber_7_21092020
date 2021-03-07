@@ -42,17 +42,6 @@ export default new Vuex.Store({
         router.push('/');
       }
     },
-    createPost() {
-      console.log("J'envoie !");
-      // axios.post('/posts', { img_url: "http://localhost:3000/images/img-test.png", UserId: this.state.userId })
-      //   .then(res => {
-      //     console.log(res);
-      //     this.dispatch('getPosts');
-      //   })
-      //   .catch(error => {
-      //     console.log(error)
-      //   })
-    },
     getPosts({ commit }) {
       axios.get('/posts')
         .then(res => {
