@@ -31,12 +31,15 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'posts'
     }
   );
-  Post.associate = models => {
-    Post.belongsTo(models.User, {
+  Post.associate = function (models) {
+    models.Post.belongsTo(models.User, {
       foreignerKey: {
         allowNull: false
       }
     });
+    models.Post.hasMany(models.Like, {
+      foreignKey: 'postId',
+    })
   };
 
   Post.addScope('formatted_date', {

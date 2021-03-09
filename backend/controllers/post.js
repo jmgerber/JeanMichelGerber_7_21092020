@@ -1,9 +1,10 @@
 const { Post, User, Like } = require("../models");
 const { Op } = require("sequelize");
+const fs = require('fs');
 
 exports.getPosts = (req, res) => {
   Post.scope('formatted_date').findAll({
-    include: [{ model: User, as: 'User' }],
+    include: [{ model: User, as: 'User' }, { model: Like }],
     order: [
       ['date_publication', 'DESC']
     ]
@@ -12,8 +13,7 @@ exports.getPosts = (req, res) => {
       res.status(200).json(posts);
     })
     .catch(error => {
-      console.log(error);
-      res.status(400).json({ error })
+      res.status(400).json({ error });
     });
 }
 
@@ -25,6 +25,21 @@ exports.createPost = (req, res) => {
   Post.create(newPost)
     .then(post => res.status(200).json(post))
     .catch(error => res.status(400).json({ error }));
+}
+
+exports.deletePost = (req, res) => {
+  Post.findOne({ where: { id: req.params.id } })
+    .then(post => {
+      const filename = post.img_url.split('/images/')[1];
+      fs.unlink(`images/${filename}`, () => {
+        Post.destroy({ where: { id: req.params.id } })
+          .then(() => res.status(200).json({ message: 'Post supprimé !' }))
+          .catch(error => res.status(400).json({ error }));
+      })
+    })
+    .catch(error => {
+      console.log(error);
+    })
 }
 
 exports.likePost = (req, res) => {

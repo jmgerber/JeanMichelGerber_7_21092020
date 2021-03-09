@@ -15,6 +15,15 @@
             Publié {{ formatDate(post.formatted_date) }}
           </p>
         </div>
+        <button
+          v-if="
+            post.UserId == $store.state.userId ||
+            $store.state.connectedUser.admin == true
+          "
+          @click="$store.dispatch({ type: 'deletePost', id: post.id })"
+        >
+          <font-awesome-icon :icon="['fas', 'trash-alt']" />
+        </button>
       </header>
       <section class="post-picture">
         <img :src="post.img_url" alt="Photo d'un post" />
@@ -83,20 +92,34 @@ export default {
     height: 56px;
     background-color: #fff;
     display: flex;
+    align-items: center;
     img {
-      margin: 5px 0 0 5px;
+      margin-left: 10px;
       height: 80%;
       border-radius: 50%;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
     }
     .header-text {
-      margin: 6px 0 0 15px;
+      margin-left: 12px;
       &__name {
         font-weight: 500;
         font-size: 1.1rem;
       }
       &__relativetime {
         font-weight: 300;
+      }
+    }
+    button {
+      margin: 0 10px 0 auto;
+      background-color: #f45d55;
+      border: 2px solid #ce4942;
+      color: white;
+      font-size: 1.1rem;
+      padding: 2px 5px;
+      transition: 0.1s;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
       }
     }
   }

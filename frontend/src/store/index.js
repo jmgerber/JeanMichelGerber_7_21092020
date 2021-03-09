@@ -11,6 +11,7 @@ export default new Vuex.Store({
     connectedUser: null,
     posts: null,
     errorMsg: null,
+    likes: null
   },
   getters: {
     showConnectedUser: (state) => state.connectedUser,
@@ -43,7 +44,7 @@ export default new Vuex.Store({
       }
     },
     getPosts({ commit }) {
-      axios.get('/posts')
+      axios.get('/posts/' + this.state.userId)
         .then(res => {
           commit("setPosts", res.data);
         })
@@ -65,6 +66,16 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    deletePost(res, payload) {
+      axios.delete("/posts/" + payload.id)
+        .then(res => {
+          console.log(res);
+          this.dispatch('getPosts');
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    }
   },
   modules: {
   }

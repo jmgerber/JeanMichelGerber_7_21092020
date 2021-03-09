@@ -51,7 +51,7 @@ export default {
       formData.append("userId", this.$store.state.userId);
       formData.append("image", this.filename);
       axios
-        .post("/posts/create", formData, {
+        .post("/posts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
