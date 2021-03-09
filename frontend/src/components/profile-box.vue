@@ -22,7 +22,7 @@ export default {
   methods: {
     ...mapActions(["getOneUser"]),
   },
-  created() {
+  mounted() {
     this.getOneUser();
   },
 };

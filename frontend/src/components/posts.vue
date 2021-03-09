@@ -17,9 +17,11 @@
         </div>
         <button
           v-if="
-            post.UserId == $store.state.userId ||
-            $store.state.connectedUser.admin == true
+            $store.state.connectedUser != null &&
+            (post.UserId == $store.state.userId ||
+              $store.state.connectedUser.admin == true)
           "
+          title="Supprimer ce post"
           @click="$store.dispatch({ type: 'deletePost', id: post.id })"
         >
           <font-awesome-icon :icon="['fas', 'trash-alt']" />

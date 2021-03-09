@@ -45,18 +45,22 @@ module.exports = (sequelize, DataTypes) => {
   },
     {
       timestamps: false,
-      tableName: 'users'
+      tableName: 'users',
     }
   );
 
+
   User.associate = function (models) {
     models.User.hasMany(models.Post, {
-      onDelete: "cascade",
       foreignKeys: {
         allowNull: false
       }
     });
   };
+
+  User.addScope('nopassword', {
+    attributes: { exclude: ['password'] }
+  });
 
   return User;
 }

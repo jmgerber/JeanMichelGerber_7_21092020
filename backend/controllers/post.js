@@ -4,7 +4,7 @@ const fs = require('fs');
 
 exports.getPosts = (req, res) => {
   Post.scope('formatted_date').findAll({
-    include: [{ model: User, as: 'User' }, { model: Like }],
+    include: [{ model: User, as: 'User', attributes: { exclude: ['password'] } }, { model: Like }],
     order: [
       ['date_publication', 'DESC']
     ]

@@ -7,12 +7,12 @@
         alt="Logo de Groupomania"
         height="50"
     /></router-link>
-    <router-link
-      to="/"
-      v-if="this.$store.state.userId != null"
-      @click.native="$store.dispatch('disconnectUser')"
-      >Déconnexion</router-link
-    >
+    <div v-if="this.$store.state.userId != null">
+      <router-link class="profile-link" to="/profile"> Mon compte </router-link>
+      <router-link to="/" @click.native="$store.dispatch('disconnectUser')"
+        >Déconnexion</router-link
+      >
+    </div>
   </nav>
 </template>
 
@@ -25,11 +25,13 @@ export default {
 <style lang="scss">
 nav {
   display: flex;
-  justify-content: space-around;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.92);
   padding: 12px 0;
-  text-align: center;
+  justify-content: space-around;
+  .profile-link {
+    margin-right: 20px;
+  }
   a {
     outline: none;
     text-decoration: none;

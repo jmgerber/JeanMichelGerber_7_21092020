@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Post.associate = function (models) {
     models.Post.belongsTo(models.User, {
+      onDelete: "cascade",
       foreignerKey: {
         allowNull: false
       }

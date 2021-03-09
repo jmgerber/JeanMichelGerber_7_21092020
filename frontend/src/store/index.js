@@ -27,7 +27,7 @@ export default new Vuex.Store({
       commit('setUserId', userId);
     },
     getOneUser({ commit }) {
-      axios.post('auth/user', { id: this.state.userId })
+      axios.post('user', { id: this.state.userId })
         .then(res => {
           commit('setConnectedUser', res.data)
         })

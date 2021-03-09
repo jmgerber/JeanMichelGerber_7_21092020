@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { User } = require("../models");
 
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const newUser = {
@@ -21,7 +21,7 @@ exports.signup = (req, res, next) => {
     })
 };
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
   User.findOne({ where: { email: req.body.email } })
     .then(user => {
       if (!user) {
@@ -49,10 +49,42 @@ exports.login = (req, res, next) => {
     })
 };
 
-exports.getOneUser = (req, res, next) => {
-  User.findOne({ where: { id: req.body.id } })
+exports.getOneUser = (req, res) => {
+  User.scope('nopassword').findOne({ where: { id: req.body.id } })
     .then(user => res.status(200).json(user))
     .catch((error) => {
       console.log(error)
     })
+}
+
+exports.changePassword = (req, res) => {
+  User.findOne({ where: { id: req.body.id } })
+    .then(user => {
+      bcrypt.compare(req.body.oldPassword, user.dataValues.password)
+        .then(valid => {
+          if (!valid) {
+            return res.status(401).json({ error: "Ancien mot de passe incorrect !" })
+          }
+          bcrypt.hash(req.body.newPassword, 10)
+            .then(newHash => {
+              User.update({ password: newHash }, { where: { id: req.body.id } })
+              res.status(200).json({ message: "Mot de passe changé avec succès" })
+            })
+            .catch(error => {
+              res.status(500).json({ error });
+            })
+        })
+        .catch(error => res.status(400).json({ error }))
+    })
+    .catch(() => res.status(500).json({ error: "L'utilisateur n'a pas été trouvé !" }))
+}
+
+exports.deleteUser = (req, res) => {
+  User.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(() => res.status(200).json({ message: "Utilisateur supprimé" }))
+    .catch(error => console.log(error));
 }
