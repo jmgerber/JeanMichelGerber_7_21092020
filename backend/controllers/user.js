@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { User } = require("../models");
-
+const CryptoJS = require('crypto-js');
 
 exports.signup = (req, res) => {
   bcrypt.hash(req.body.password, 10)
@@ -9,7 +9,7 @@ exports.signup = (req, res) => {
       const newUser = {
         firstname: req.body.firstname,
         lastname: req.body.lastname.toUpperCase(),
-        email: req.body.email,
+        email: CryptoJS.MD5(req.body.email).toString(),
         password: hash
       }
       User.create(newUser)
@@ -22,7 +22,8 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  User.findOne({ where: { email: req.body.email } })
+  let cryptedMail = CryptoJS.MD5(req.body.email).toString();
+  User.findOne({ where: { email: cryptedMail } })
     .then(user => {
       if (!user) {
         return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -77,6 +78,19 @@ exports.changePassword = (req, res) => {
         .catch(error => res.status(400).json({ error }))
     })
     .catch(() => res.status(500).json({ error: "L'utilisateur n'a pas été trouvé !" }))
+}
+
+exports.changeAvatar = (req, res) => {
+  const newAvatar = {
+    avatar_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  }
+  User.update(newAvatar, {
+    where: {
+      id: req.body.userId
+    }
+  })
+    .then(() => res.status(200).json({ message: "Avatar changé" }))
+    .catch(error => console.log(error));
 }
 
 exports.deleteUser = (req, res) => {
