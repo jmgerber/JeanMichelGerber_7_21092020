@@ -23,19 +23,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
+
 nav {
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.92);
+  background-color: rgba($black, 0.92);
   padding: 12px 0;
   justify-content: space-around;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
   .profile-link {
     margin-right: 20px;
   }
   a {
     outline: none;
     text-decoration: none;
-    color: #fff;
+    color: $white;
     font-weight: 500;
     font-size: 1.1rem;
   }

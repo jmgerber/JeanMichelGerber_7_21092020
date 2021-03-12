@@ -69,6 +69,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
+
 .add-post-button {
   text-align: center;
   width: 0.1px;
@@ -82,8 +84,8 @@ export default {
     width: 100%;
     font-size: 1.2em;
     font-weight: 300;
-    border: 2px dashed rgba(253, 81, 1, 0.8);
-    background-color: #fff;
+    border: 2px dashed rgba($primary-color, 0.8);
+    background-color: $white;
     display: inline-block;
     cursor: pointer;
     margin-bottom: 30px;
@@ -94,16 +96,17 @@ export default {
     }
     .image-preview {
       max-height: 250px;
+      max-width: 90%;
       margin-top: 10px;
     }
     button {
-      color: #fff;
+      color: $white;
       font-weight: 500;
       font-size: 1.2rem;
       appearance: none;
       border: none;
       padding: 6px 15px;
-      background-color: rgba(253, 81, 1, 0.9);
+      background-color: rgba($primary-color, 0.9);
       cursor: pointer;
       transition: 0.3s;
       &:hover {
@@ -114,10 +117,10 @@ export default {
   &:focus + label,
   & + label:hover {
     border-style: solid;
-    background-color: rgba(253, 81, 1, 0.05);
+    background-color: rgba($primary-color, 0.05);
     & > div svg {
       transform: scale(1.2);
-      color: rgba(253, 81, 1, 0.9);
+      color: rgba($primary-color, 0.9);
     }
   }
 }

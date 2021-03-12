@@ -73,6 +73,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
 #signup-container > h1 {
   text-align: center;
   font-size: 1.5rem;
@@ -82,14 +83,14 @@ export default {
 
 #signup-form {
   border-radius: 1rem;
-  background-color: rgba(0, 0, 0, 0.18);
+  background-color: rgba($black, 0.18);
   width: 60%;
   margin: 20px auto 0;
   h2 {
     text-align: center;
-    color: #fff;
+    color: $white;
     border-radius: 1rem 1rem 0 0;
-    background-color: rgba(253, 81, 1, 0.8);
+    background-color: rgba($primary-color, 0.8);
     padding: 10px 0;
     text-transform: uppercase;
     font-size: 1.6rem;
@@ -132,8 +133,8 @@ export default {
       color: rgb(206, 21, 21);
     }
     button {
-      color: #fff;
-      background-color: rgba(253, 81, 1, 0.8);
+      color: $white;
+      background-color: rgba($primary-color, 0.8);
       padding: 10px 24px;
       font-size: 1.1rem;
       border-radius: 1rem;

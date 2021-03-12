@@ -20,6 +20,7 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import "./sass/colors";
 body {
   background-image: url("./assets/startup.jpg");
   background-attachment: fixed;
@@ -35,10 +36,18 @@ h1 {
   font-family: "Roboto", sans-serif;
 }
 .main-container {
-  width: 60%;
+  box-sizing: border-box;
+  width: 70%;
   height: auto;
   margin: 50px auto;
-  background-color: rgba(255, 255, 255, 0.97);
+  background-color: rgba($white, 0.97);
   padding: 40px;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+    margin: 0;
+  }
+  @media screen and (max-width: 600px) {
+    padding: 20px;
+  }
 }
 </style>

@@ -86,23 +86,30 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
+
 #posts-container {
   width: 70%;
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
   article {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba($black, 0.1);
     margin-bottom: 40px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 6px rgba($black, 0.2);
   }
   .header-post {
     height: 56px;
-    background-color: #fff;
+    background-color: $white;
     display: flex;
     align-items: center;
     img {
       margin-left: 10px;
-      height: 80%;
+      height: 46px;
+      width: 46px;
+      object-fit: cover;
       border-radius: 50%;
-      box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 3px rgba($black, 0.5);
     }
     .header-text {
       margin-left: 12px;
@@ -116,9 +123,9 @@ export default {
     }
     button {
       margin: 0 10px 0 auto;
-      background-color: #f45d55;
-      border: 2px solid #ce4942;
-      color: white;
+      background-color: $error-color;
+      border: 2px solid darken($error-color, 12%);
+      color: $white;
       font-size: 1.1rem;
       padding: 2px 5px;
       transition: 0.1s;
@@ -140,7 +147,7 @@ export default {
   .likes-container {
     display: flex;
     justify-content: space-evenly;
-    background-color: #fff;
+    background-color: $white;
     padding: 4px 0;
     .like-button {
       width: 49%;
@@ -154,12 +161,12 @@ export default {
       justify-content: center;
       cursor: pointer;
       &.like {
-        background-color: #4bd86a;
-        border: 2px solid #32c068;
+        background-color: $success-color;
+        border: 2px solid darken($success-color, 10%);
       }
       &.dislike {
-        background-color: #f45d55;
-        border: 2px solid #ce4942;
+        background-color: $error-color;
+        border: 2px solid darken($error-color, 10%);
       }
       svg {
         font-size: 1.3rem;

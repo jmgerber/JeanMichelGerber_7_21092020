@@ -1,6 +1,16 @@
 <template>
   <section class="profile-section" v-if="user">
-    <img :src="user.avatar_url" alt="Photo de profil" />
+    <input
+      name="modify-avatar"
+      type="file"
+      id="modify-avatar"
+      accept=".png, .jpg, .jpeg"
+      @change="changeAvatar"
+    />
+    <label for="modify-avatar">
+      <img :src="user.avatar_url" alt="Photo de profil" />
+      <p>Changer l'avatar</p>
+    </label>
     <h1>{{ user.lastname }} {{ user.firstname }}</h1>
     <div class="member-status">
       <span v-if="user.admin == true">Admin</span>
@@ -47,6 +57,24 @@ export default {
   },
   methods: {
     ...mapActions(["getOneUser"]),
+    changeAvatar() {
+      let filename = document.querySelector("#modify-avatar").files[0];
+      const formData = new FormData();
+      formData.append("userId", this.$store.state.userId);
+      formData.append("image", filename);
+      axios
+        .put("/user/avatar", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          this.$store.dispatch("getOneUser");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     changePassword() {
       axios
         .put("/user/changepassword", {
@@ -112,18 +140,53 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
+
 .profile-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  img {
-    height: 100%;
-    width: 100%;
-    max-height: 250px;
-    max-width: 250px;
-    border-radius: 50%;
-    margin-bottom: 12px;
+  #modify-avatar {
+    text-align: center;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+    & + label {
+      text-align: center;
+      position: relative;
+      height: 100%;
+      width: 100%;
+      max-height: 250px;
+      max-width: 250px;
+      margin-bottom: 12px;
+      img {
+        width: 100%;
+        height: 100%;
+        max-height: 220px;
+        max-width: 220px;
+        object-fit: cover;
+        cursor: pointer;
+        &:hover + p {
+          display: block;
+        }
+      }
+      p {
+        border-radius: 1rem;
+        padding: 0 12px;
+        background-color: rgba($black, 0.3);
+        color: #fff;
+        font-size: 1.4rem;
+        position: absolute;
+        bottom: 15%;
+        left: 13%;
+        display: none;
+      }
+    }
   }
+
   h1 {
     margin-bottom: 4px;
     font-weight: 300;
@@ -131,7 +194,7 @@ export default {
   .member-status {
     color: #fff;
     font-weight: 500;
-    background-color: rgba(253, 81, 1, 0.9);
+    background-color: rgba($primary-color, 0.9);
     padding: 5px 10px;
     border-radius: 0.5rem;
   }
@@ -149,7 +212,7 @@ export default {
         border-radius: 1rem;
         padding-left: 12px;
         font-weight: 400;
-        border: 2px solid rgba(253, 81, 1, 0.9);
+        border: 2px solid rgba($primary-color, 0.9);
         outline: none;
       }
     }
@@ -159,9 +222,9 @@ export default {
       font-size: 1.2rem;
       appearance: none;
       border: none;
-      border-radius: 1rem;
+      border-radius: 0.9rem;
       padding: 6px 15px;
-      background-color: rgba(253, 81, 1, 0.9);
+      background-color: rgba($primary-color, 0.9);
       cursor: pointer;
     }
   }
@@ -173,10 +236,10 @@ export default {
       font-weight: 500;
       font-size: 1.2rem;
       appearance: none;
-      border-radius: 1rem;
+      border-radius: 0.9rem;
       padding: 6px 15px;
-      border: 2px solid #ce3028;
-      background-color: #e24b43;
+      border: 2px solid darken($error-color, 12%);
+      background-color: $error-color;
       cursor: pointer;
     }
   }

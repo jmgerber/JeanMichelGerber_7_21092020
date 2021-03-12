@@ -142,8 +142,10 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../sass/colors";
+
 .comments-container {
-  background-color: #fff;
+  background-color: $white;
   padding: 10px;
   h3 {
     margin: 0 0 5px;
@@ -161,12 +163,12 @@ export default {
     }
     button {
       border: none;
-      background-color: rgba(253, 81, 1, 0.9);
+      background-color: rgba($primary-color, 0.9);
       border-radius: 0 0.5rem 0.5rem 0;
       font-size: 1.1rem;
-      color: #fff;
+      color: $white;
       font-weight: 500;
-      border: 1px solid #fff;
+      border: 1px solid $white;
       border-left: none;
       cursor: pointer;
     }
@@ -175,10 +177,12 @@ export default {
     width: 30px;
     height: 30px;
     margin-right: 6px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   .single-comment {
     display: flex;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 4px rgba($black, 0.9);
     margin-bottom: 8px;
     border-radius: 0.5rem;
     padding: 6px;
@@ -194,9 +198,9 @@ export default {
       width: 30px;
       margin-left: auto;
       font-size: 1rem;
-      background-color: #f45d55;
-      border: 2px solid #ce4942;
-      color: #fff;
+      background-color: $error-color;
+      border: 2px solid darken($error-color, 12%);
+      color: $white;
       padding: 0 4px;
       transition: 0.1s;
       cursor: pointer;
@@ -209,9 +213,9 @@ export default {
       width: 30px;
       margin-left: 4px;
       font-size: 1.05rem;
-      background-color: #0e62ff;
-      border: 2px solid #0038d3;
-      color: #fff;
+      background-color: $primary-color;
+      border: 2px solid darken($primary-color, 8%);
+      color: $white;
       padding: 0 4px;
       transition: 0.1s;
       cursor: pointer;

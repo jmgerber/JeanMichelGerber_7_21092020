@@ -25,5 +25,8 @@ export default {
 .home-container {
   display: flex;
   justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    display: inline-block;
+  }
 }
 </style>
