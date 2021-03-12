@@ -50,11 +50,13 @@
           <span>{{ post.dislikes }}</span>
         </button>
       </div>
+      <Comments :post="post" />
     </article>
   </section>
 </template>
 
 <script>
+import Comments from "./comments";
 import CreatePost from "./create-post";
 import { mapActions, mapGetters } from "vuex";
 // Pour la gestion des dates
@@ -65,6 +67,7 @@ export default {
   name: "Posts",
   components: {
     CreatePost,
+    Comments,
   },
   computed: {
     ...mapGetters(["showPosts"]),

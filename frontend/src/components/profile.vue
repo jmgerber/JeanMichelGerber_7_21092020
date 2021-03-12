@@ -9,7 +9,7 @@
     <form @submit.prevent="changePassword">
       <h3>Changer de mot de passe</h3>
       <p class="input-container">
-        <label for="old-password">Ancien mot de passe</label><br />
+        <label for="old-password">Mot de passe actuel</label><br />
         <input name="old-password" type="password" v-model="oldPassword" />
       </p>
       <p class="input-container">

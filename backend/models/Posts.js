@@ -35,10 +35,14 @@ module.exports = (sequelize, DataTypes) => {
     models.Post.belongsTo(models.User, {
       onDelete: "cascade",
       foreignerKey: {
+        name: 'UserId',
         allowNull: false
       }
     });
     models.Post.hasMany(models.Like, {
+      foreignKey: 'postId',
+    })
+    models.Post.hasMany(models.Comment, {
       foreignKey: 'postId',
     })
   };

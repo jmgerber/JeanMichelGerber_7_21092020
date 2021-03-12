@@ -63,7 +63,7 @@ exports.changePassword = (req, res) => {
       bcrypt.compare(req.body.oldPassword, user.dataValues.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({ error: "Ancien mot de passe incorrect !" })
+            return res.status(400).json({ error: 'Mot de passe actuel incorrect' })
           }
           bcrypt.hash(req.body.newPassword, 10)
             .then(newHash => {
