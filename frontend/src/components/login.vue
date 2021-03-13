@@ -6,11 +6,23 @@
       <form method="post" @submit.prevent="loginUser">
         <p class="input-container">
           <label for="email">Email</label><br />
-          <input type="text" name="email" v-model="email" />
+          <input
+            required
+            type="email"
+            name="email"
+            id="email"
+            v-model="email"
+          />
         </p>
         <p class="input-container">
           <label for="password">Mot de passe</label><br />
-          <input type="password" name="password" v-model="password" />
+          <input
+            required
+            type="password"
+            name="password"
+            id="password"
+            v-model="password"
+          />
         </p>
         <p class="error-login" v-if="this.$store.state.errorMsg != null">
           {{ this.$store.state.errorMsg }}
@@ -71,7 +83,7 @@ export default {
 
 #login-container > h1 {
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   padding-top: 15px;
   font-weight: 400;
 }
@@ -81,6 +93,9 @@ export default {
   background-color: rgba($black, 0.18);
   width: 60%;
   margin: 20px auto 0;
+  @media screen and (max-width: 600px) {
+    width: 80%;
+  }
   h2 {
     margin: 0;
     text-align: center;
@@ -116,7 +131,10 @@ export default {
         padding-left: 12px;
         font-weight: 400;
         border: none;
-        outline: none;
+        &:focus {
+          outline: 2px dashed #999;
+          outline-offset: 1px;
+        }
       }
     }
     .error-login {

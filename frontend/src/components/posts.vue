@@ -28,7 +28,12 @@
         </button>
       </header>
       <section class="post-picture">
-        <img :src="post.img_url" alt="Photo d'un post" />
+        <img
+          :src="post.img_url"
+          :alt="
+            'Publication de' + post.User.lastname + ' ' + post.User.firstname
+          "
+        />
       </section>
       <div class="likes-container">
         <button
@@ -154,8 +159,6 @@ export default {
       height: 40px;
       color: #212121;
       border: none;
-      appearance: none;
-      outline: none;
       display: flex;
       align-items: center;
       justify-content: center;

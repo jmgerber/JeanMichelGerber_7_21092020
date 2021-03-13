@@ -7,7 +7,7 @@
       accept=".png, .jpg, .jpeg"
       @change="changeAvatar"
     />
-    <label for="modify-avatar">
+    <label tabindex="0" for="modify-avatar">
       <img :src="user.avatar_url" alt="Photo de profil" />
       <p>Changer l'avatar</p>
     </label>
@@ -19,12 +19,22 @@
     <form @submit.prevent="changePassword">
       <h3>Changer de mot de passe</h3>
       <p class="input-container">
-        <label for="old-password">Mot de passe actuel</label><br />
-        <input name="old-password" type="password" v-model="oldPassword" />
+        <label for="old-password">Mot de passe actuel</label>
+        <input
+          name="old-password"
+          type="password"
+          v-model="oldPassword"
+          id="old-password"
+        />
       </p>
       <p class="input-container">
-        <label for="new-password">Nouveau mot de passe</label><br />
-        <input name="new-password" type="password" v-model="newPassword" />
+        <label for="new-password">Nouveau mot de passe</label>
+        <input
+          name="new-password"
+          type="password"
+          v-model="newPassword"
+          id="new-password"
+        />
       </p>
       <button type="submit">Valider</button>
     </form>
@@ -213,14 +223,16 @@ export default {
         padding-left: 12px;
         font-weight: 400;
         border: 2px solid rgba($primary-color, 0.9);
-        outline: none;
+        &:focus {
+          outline: 1px dashed #aaa;
+          outline-offset: 1px;
+        }
       }
     }
     button {
       color: #fff;
       font-weight: 500;
       font-size: 1.2rem;
-      appearance: none;
       border: none;
       border-radius: 0.9rem;
       padding: 6px 15px;
@@ -232,12 +244,12 @@ export default {
     text-align: center;
     button {
       margin-bottom: 12px;
-      color: #fff;
-      font-weight: 500;
+      color: lighten($black, 15%);
+      font-weight: 600;
       font-size: 1.2rem;
       appearance: none;
       border-radius: 0.9rem;
-      padding: 6px 15px;
+      padding: 8px 15px;
       border: 2px solid darken($error-color, 12%);
       background-color: $error-color;
       cursor: pointer;

@@ -6,6 +6,7 @@
         required
         placeholder="Entrez un commentaire..."
         v-model="commentText"
+        title="Zone de saisie pour entrer un commentaire"
       />
       <button type="submit">Envoyer</button>
     </form>
@@ -168,7 +169,6 @@ export default {
       font-size: 1.1rem;
       color: $white;
       font-weight: 500;
-      border: 1px solid $white;
       border-left: none;
       cursor: pointer;
     }

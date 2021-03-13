@@ -9,21 +9,45 @@
       <form method="post" @submit.prevent="saveUser">
         <div class="names">
           <p class="input-container">
-            <label for="lastName">Nom</label>
-            <input type="text" name="lastName" v-model="lastname" />
+            <label for="lastname">Nom</label>
+            <input
+              required
+              type="text"
+              name="lastname"
+              v-model="lastname"
+              id="lastname"
+            />
           </p>
           <p class="input-container">
-            <label for="firstName">Prénom</label>
-            <input type="text" name="firstName" v-model="firstname" />
+            <label for="firstname">Prénom</label>
+            <input
+              required
+              type="text"
+              name="firstname"
+              v-model="firstname"
+              id="firstname"
+            />
           </p>
         </div>
         <p class="input-container">
           <label for="email">Email</label>
-          <input type="text" name="email" v-model="email" />
+          <input
+            required
+            type="email"
+            name="email"
+            v-model="email"
+            id="email"
+          />
         </p>
         <p class="input-container">
           <label for="password">Mot de passe</label>
-          <input type="password" name="password" v-model="password" />
+          <input
+            required
+            type="password"
+            name="password"
+            v-model="password"
+            id="password"
+          />
         </p>
         <p class="error-signup" v-if="this.$store.state.errorMsg != null">
           {{ this.$store.state.errorMsg }}
@@ -78,7 +102,7 @@ export default {
   text-align: center;
   font-size: 1.5rem;
   padding-top: 15px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 #signup-form {
@@ -86,6 +110,9 @@ export default {
   background-color: rgba($black, 0.18);
   width: 60%;
   margin: 20px auto 0;
+  @media screen and (max-width: 600px) {
+    width: 90%;
+  }
   h2 {
     text-align: center;
     color: $white;
@@ -105,6 +132,9 @@ export default {
       display: flex;
       justify-content: space-between;
       width: 70%;
+      @media screen and (max-width: 600px) {
+        width: 90%;
+      }
       .input-container {
         width: 48%;
       }
@@ -112,6 +142,9 @@ export default {
     .input-container {
       margin-bottom: 12px;
       width: 70%;
+      @media screen and (max-width: 600px) {
+        width: 90%;
+      }
       label {
         font-weight: 500;
       }
@@ -126,7 +159,10 @@ export default {
         padding-left: 12px;
         font-weight: 400;
         border: none;
-        outline: none;
+        &:focus {
+          outline: 2px dashed #999;
+          outline-offset: 1px;
+        }
       }
     }
     .error-signup {
