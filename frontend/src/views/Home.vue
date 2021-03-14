@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Login v-if="this.$store.state.userId == null" />
+  <div v-else class="home-container">
+    <ProfileBox />
+    <Posts />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Login from "../components/login";
+import Posts from "../components/posts";
+import ProfileBox from "../components/profile-box";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
+    Login,
+    Posts,
+    ProfileBox,
+  },
+};
+</script>
+
+<style lang="scss">
+.home-container {
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    display: inline-block;
   }
 }
-</script>
+</style>

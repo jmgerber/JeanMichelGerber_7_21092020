@@ -2,6 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const path = require('path');
+
+
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+
 
 const app = express();
 app.disable("x-powered-by");
@@ -14,17 +20,11 @@ app.use((req, res, next) => {
   next();
 });
 
-const { User } = require("./models");
-
-app.get("/select", (req, res) => {
-  User.findAll().then(users => {
-    res.send(users);
-  }).catch((error) => {
-    console.error(error);
-  })
-})
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api', userRoutes);
+app.use('/api', postRoutes);
 
 module.exports = app;

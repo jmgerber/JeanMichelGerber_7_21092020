@@ -6,22 +6,29 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       allowNull: false
     },
-    firstName: {
+    firstname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /[A-Z\-]{2,}/gi
+      }
     },
-    lastName: {
+    lastname: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        is: /[A-Z\-]{2,}/gi
+      }
     },
     avatar_url: {
       type: DataTypes.STRING,
-      defaultValue: 'images/default_picture.png',
+      defaultValue: 'http://localhost:3000/images/default_picture.jpg',
       allowNull: false
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -29,10 +36,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     admin: {
       type: DataTypes.BOOLEAN,
+      defaultValue: 0,
       allowNull: false
     }
   },
-    { timestamps: false }
+    {
+      timestamps: false,
+      tableName: 'users',
+    }
   );
+
+  User.associate = function (models) {
+    models.User.hasMany(models.Post, {
+      foreignKeys: {
+        allowNull: false
+      }
+    });
+  };
+
+  User.addScope('nopassword', {
+    attributes: { exclude: ['password'] }
+  });
+
   return User;
 }
