@@ -21,7 +21,7 @@ exports.getPosts = (req, res) => {
     })
     .catch(error => {
       console.log(error);
-      res.status(400).json({ error });
+      res.status(500).json({ error });
     });
 }
 
@@ -36,7 +36,6 @@ exports.createPost = (req, res) => {
 }
 
 exports.deletePost = (req, res) => {
-  console.log('Ici');
   Post.findOne({ where: { id: req.params.id } })
     .then(post => {
       const filename = post.img_url.split('/images/')[1];
@@ -46,9 +45,7 @@ exports.deletePost = (req, res) => {
           .catch(error => res.status(400).json({ error }));
       })
     })
-    .catch(error => {
-      console.log(error);
-    })
+    .catch(error => res.status(500).json({ error }));
 }
 
 exports.likePost = (req, res) => {
@@ -123,43 +120,5 @@ exports.likePost = (req, res) => {
         }
       }
     })
-    .catch(error => {
-      console.log(error);
-    })
-}
-
-exports.commentPost = (req, res) => {
-  Comment.create(req.body)
-    .then(() => {
-      res.status(200).json({ message: "Commentaire publié" });
-    })
-    .catch(error => {
-      console.log(error);
-    })
-}
-
-exports.deleteComment = (req, res) => {
-  Comment.destroy({
-    where: {
-      id: req.params.id
-    }
-  })
-    .then(() => {
-      res.status(200).json({ message: "Commentaire supprimé" });
-    })
-    .catch(error => {
-      console.log(error);
-    })
-}
-
-exports.modifyComment = (req, res) => {
-  Comment.update({ content: req.body.content },
-    { where: { id: req.body.id } }
-  )
-    .then(() => {
-      res.status(200).json({ message: "Commentaire modifié" });
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    .catch(error => res.status(500).json({ error }));
 }

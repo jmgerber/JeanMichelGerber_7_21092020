@@ -82,13 +82,12 @@ export default {
     ...mapActions(["getPosts"]),
     createComment(postId) {
       axios
-        .post("posts/comment", {
+        .post("comment", {
           postId: postId,
           userId: this.$store.state.userId,
           content: this.commentText,
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.getPosts();
           this.commentText = null;
         })
@@ -109,7 +108,7 @@ export default {
         "modify-comment-form-" + commentId
       ).firstChild.value;
       axios
-        .put("posts/comment", {
+        .put("comment", {
           id: commentId,
           content: modifiedComment,
         })
@@ -130,7 +129,7 @@ export default {
     },
     deleteComment(commentId) {
       axios
-        .delete("posts/comment/" + commentId)
+        .delete("comment/" + commentId)
         .then(() => {
           this.getPosts();
         })
