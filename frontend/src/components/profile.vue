@@ -50,6 +50,7 @@
 <script>
 import Swal from "sweetalert2";
 import axios from "axios";
+
 import { mapActions, mapGetters } from "vuex";
 import router from "../router";
 
@@ -59,7 +60,6 @@ export default {
     return {
       oldPassword: null,
       newPassword: null,
-      successMessage: null,
     };
   },
   computed: {
@@ -81,8 +81,8 @@ export default {
         .then(() => {
           this.$store.dispatch("getOneUser");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     },
     changePassword() {
@@ -92,12 +92,20 @@ export default {
           oldPassword: this.oldPassword,
           newPassword: this.newPassword,
         })
-        .then((res) => {
+        .then(() => {
           this.oldPassword = this.newPassword = null;
-          this.successMessage = res.data.message;
+          Swal.fire({
+            icon: "success",
+            text: "Mot de passe changé avec succès",
+            confirmButtonColor: "#fd5101",
+          });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          Swal.fire({
+            text: "Le mot de passe actuel est incorrect",
+            icon: "error",
+            confirmButtonColor: "#fd5101",
+          });
         });
     },
     deleteUser() {
@@ -115,6 +123,7 @@ export default {
           axios
             .delete("/user/" + this.$store.state.userId)
             .then(() => {
+              // On réinitialise le store et on le déconnecte
               let state = this.$store.state;
               let initialState = {};
               Object.keys(state).forEach((key) => {
@@ -125,26 +134,15 @@ export default {
               localStorage.clear();
               router.push("/");
             })
-            .catch((error) => {
-              console.log(error);
+            .catch(() => {
+              // console.log(error);
             });
         }
       });
     },
   },
   mounted() {
-    this.successMessage = null;
     this.getOneUser();
-  },
-  updated() {
-    if (this.successMessage != null) {
-      Swal.fire({
-        icon: "success",
-        text: "Mot de passe changé avec succès",
-        confirmButtonColor: "#fd5101",
-      });
-      this.successMessage = null;
-    }
   },
 };
 </script>
