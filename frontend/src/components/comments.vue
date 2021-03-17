@@ -65,6 +65,7 @@
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
 import { mapActions } from "vuex";
 
 export default {
@@ -91,8 +92,8 @@ export default {
           this.getPosts();
           this.commentText = null;
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     },
     modifyComment(id, content) {
@@ -123,19 +124,31 @@ export default {
           }
           this.getPosts();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     },
     deleteComment(commentId) {
-      axios
-        .delete("comment/" + commentId)
-        .then(() => {
-          this.getPosts();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      Swal.fire({
+        title: "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui",
+        confirmButtonColor: "#32c068",
+        cancelButtonText: "Non",
+        cancelButtonColor: "#e24b43",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete("comment/" + commentId)
+            .then(() => {
+              this.getPosts();
+            })
+            .catch(() => {
+              // console.log(error);
+            });
+        }
+      });
     },
   },
 };

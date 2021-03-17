@@ -60,8 +60,8 @@ export default {
           this.imagePreview = null;
           this.$store.dispatch("getPosts");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         });
     },
   },
