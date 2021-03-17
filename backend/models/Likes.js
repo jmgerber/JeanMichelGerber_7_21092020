@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
     liked: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0
     },
     postId: {
       type: DataTypes.INTEGER,

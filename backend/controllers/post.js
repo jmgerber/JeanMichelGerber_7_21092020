@@ -1,8 +1,14 @@
+///////////////////////////////////////////////////////////////////
+//   Contrôleur permettant de gérer les actions liées aux posts  //
+///////////////////////////////////////////////////////////////////
+
 const { Post, User, Like, Comment } = require("../models");
 const { Op } = require("sequelize");
 const fs = require('fs');
 
 exports.getPosts = (req, res) => {
+  // Cherche tous les posts en incluant les utilisateurs correspondants, récupère les likes ainsi que les commentaires
+  // dans l'ordre décroissant des dates
   Post.scope('formatted_date').findAll({
     include: [{ model: User, as: 'User', attributes: ['firstname', 'lastname', 'avatar_url'] },
     { model: Like },
@@ -20,7 +26,6 @@ exports.getPosts = (req, res) => {
       res.status(200).json(posts);
     })
     .catch(error => {
-      console.log(error);
       res.status(500).json({ error });
     });
 }
@@ -31,18 +36,19 @@ exports.createPost = (req, res) => {
     UserId: req.body.userId
   }
   Post.create(newPost)
-    .then(post => res.status(200).json(post))
-    .catch(error => res.status(400).json({ error }));
+    .then(post => res.status(201).json(post))
+    .catch(error => res.status(500).json({ error }));
 }
 
 exports.deletePost = (req, res) => {
   Post.findOne({ where: { id: req.params.id } })
     .then(post => {
+      // On supprime l'image du post du serveur puis on supprime le post
       const filename = post.img_url.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
         Post.destroy({ where: { id: req.params.id } })
           .then(() => res.status(200).json({ message: 'Post supprimé !' }))
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(500).json({ error }));
       })
     })
     .catch(error => res.status(500).json({ error }));
@@ -62,13 +68,13 @@ exports.likePost = (req, res) => {
         if (req.body.likeValue == 1) {
           Like.create({ liked: req.body.likeValue, postId: req.body.postId, userId: req.body.userId });
           Post.increment({ likes: 1 }, { where: { id: req.body.postId } })
-          res.status(200).json({ message: 'Like ajouté au post' })
+          res.status(201).json({ message: 'Like ajouté au post' })
         }
         // et qu'il appuie sur dislike
         else if (req.body.likeValue == -1) {
           Like.create({ liked: req.body.likeValue, postId: req.body.postId, userId: req.body.userId });
           Post.increment({ dislikes: 1 }, { where: { id: req.body.postId } })
-          res.status(200).json({ message: 'Dislike ajouté au post' })
+          res.status(201).json({ message: 'Dislike ajouté au post' })
         }
       }
       // Si l'utilsateur a déjà like le post
@@ -82,7 +88,7 @@ exports.likePost = (req, res) => {
           })
           Post.increment({ dislikes: 1 }, { where: { id: req.body.postId } });
           Post.decrement({ likes: 1 }, { where: { id: req.body.postId } });
-          res.status(200).json({ message: 'Like retiré et dislike ajouté au post' })
+          res.status(201).json({ message: 'Like retiré et dislike ajouté au post' })
         }
         // et appuie sur like
         else {
@@ -92,7 +98,7 @@ exports.likePost = (req, res) => {
             }
           });
           Post.decrement({ likes: 1 }, { where: { id: req.body.postId } });
-          res.status(200).json({ message: 'Like retiré du post' })
+          res.status(201).json({ message: 'Like retiré du post' })
         }
       }
       // Si l'utilisateur a déjà dislike le post
@@ -106,7 +112,7 @@ exports.likePost = (req, res) => {
           })
           Post.decrement({ dislikes: 1 }, { where: { id: req.body.postId } });
           Post.increment({ likes: 1 }, { where: { id: req.body.postId } });
-          res.status(200).json({ message: 'Dislike retiré et like ajouté au post' })
+          res.status(201).json({ message: 'Dislike retiré et like ajouté au post' })
         }
         // et appuie sur dislike
         else {
@@ -116,7 +122,7 @@ exports.likePost = (req, res) => {
             }
           });
           Post.decrement({ dislikes: 1 }, { where: { id: req.body.postId } });
-          res.status(200).json({ message: 'Dislike retiré du post' })
+          res.status(201).json({ message: 'Dislike retiré du post' })
         }
       }
     })

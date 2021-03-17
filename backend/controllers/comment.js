@@ -1,13 +1,16 @@
+//////////////////////////////////////////////////////////////////////////
+//   Contrôleur permettant de gérer les actions liées aux commentaires  //
+//////////////////////////////////////////////////////////////////////////
+
 const { Comment } = require("../models");
 
 exports.commentPost = (req, res) => {
   Comment.create(req.body)
     .then(() => {
-      res.status(200).json({ message: "Commentaire publié" });
+      res.status(201).json({ message: "Commentaire publié" });
     })
     .catch(error => {
       res.status(500).json({ error })
-      console.log(error);
     })
 }
 
@@ -22,7 +25,6 @@ exports.deleteComment = (req, res) => {
     })
     .catch(error => {
       res.status(500).json({ error })
-      console.log(error);
     })
 }
 
@@ -31,10 +33,9 @@ exports.modifyComment = (req, res) => {
     { where: { id: req.body.id } }
   )
     .then(() => {
-      res.status(200).json({ message: "Commentaire modifié" });
+      res.status(201).json({ message: "Commentaire modifié" });
     })
     .catch(error => {
       res.status(500).json({ error })
-      console.log(error);
     })
 }

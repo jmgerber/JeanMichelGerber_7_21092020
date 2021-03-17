@@ -14,6 +14,7 @@ const normalizePort = val => {
   return false;
 };
 
+// Définit le port
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -37,6 +38,7 @@ const errorHandler = error => {
   }
 };
 
+// Création du serveur
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
@@ -46,6 +48,7 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
+// Synchronise le serveur et la BDD
 db.sequelize.sync().then((req) => {
   server.listen(port);
 });

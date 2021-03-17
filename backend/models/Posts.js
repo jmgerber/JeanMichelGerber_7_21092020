@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     img_url: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     date_publication: {
       type: DataTypes.DATE,
