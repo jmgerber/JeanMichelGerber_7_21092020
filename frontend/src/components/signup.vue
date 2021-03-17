@@ -84,8 +84,7 @@ export default {
         .then(() => {
           router.push("/");
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
           this.$store.state.errorMsg = "Cet email est déjà utilisé";
         });
     },

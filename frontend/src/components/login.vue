@@ -63,11 +63,10 @@ export default {
           this.$store.dispatch("getUserId", res.data.userId);
           this.email = this.password = null;
         })
-        .catch((error) => {
+        .catch(() => {
           this.password = null;
           this.$store.state.errorMsg =
             "Le mot de passe ou l'email est incorrect";
-          console.log(error);
         });
     },
   },

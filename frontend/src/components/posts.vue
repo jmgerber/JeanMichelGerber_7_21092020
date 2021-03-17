@@ -22,7 +22,7 @@
               $store.state.connectedUser.admin == true)
           "
           title="Supprimer ce post"
-          @click="$store.dispatch({ type: 'deletePost', id: post.id })"
+          @click="deletePost(post.id)"
         >
           <font-awesome-icon :icon="['fas', 'trash-alt']" />
         </button>
@@ -36,21 +36,11 @@
         />
       </section>
       <div class="likes-container">
-        <button
-          class="like-button like"
-          @click="
-            $store.dispatch({ type: 'likePost', id: post.id, likeValue: 1 })
-          "
-        >
+        <button class="like-button like" @click="likePost(post.id, 1)">
           <font-awesome-icon :icon="['fas', 'thumbs-up']" />
           <span>{{ post.likes }}</span>
         </button>
-        <button
-          class="like-button dislike"
-          @click="
-            $store.dispatch({ type: 'likePost', id: post.id, likeValue: -1 })
-          "
-        >
+        <button class="like-button dislike" @click="likePost(post.id, -1)">
           <font-awesome-icon :icon="['fas', 'thumbs-down']" />
           <span>{{ post.dislikes }}</span>
         </button>
@@ -61,6 +51,9 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
+import axios from "axios";
+
 import Comments from "./comments";
 import CreatePost from "./create-post";
 import { mapActions, mapGetters } from "vuex";
@@ -82,6 +75,42 @@ export default {
     formatDate(date) {
       let relativeDate = moment(date).add(1, "h").fromNow();
       return relativeDate;
+    },
+    deletePost(postId) {
+      Swal.fire({
+        title: "Êtes-vous sûr de vouloir supprimer ce post ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui",
+        confirmButtonColor: "#32c068",
+        cancelButtonText: "Non",
+        cancelButtonColor: "#e24b43",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete("/posts/" + postId)
+            .then(() => {
+              this.getPosts();
+            })
+            .catch(() => {
+              // console.log(error);
+            });
+        }
+      });
+    },
+    likePost(postId, likeValue) {
+      axios
+        .post("/posts/like", {
+          postId: postId,
+          userId: parseInt(this.$store.state.userId),
+          likeValue: likeValue,
+        })
+        .then(() => {
+          this.getPosts();
+        })
+        .catch(() => {
+          // console.log(error);
+        });
     },
   },
   mounted() {

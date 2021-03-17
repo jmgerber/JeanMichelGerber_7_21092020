@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     },
     postId: {
       type: DataTypes.INTEGER,
@@ -24,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Comment.associate = function (models) {
     models.Comment.belongsTo(models.User, {
-      foreignKey: 'userId',
+      onDelete: "cascade",
+      foreignKey: 'userId'
     })
   };
 

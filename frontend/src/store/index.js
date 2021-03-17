@@ -31,8 +31,8 @@ export default new Vuex.Store({
         .then(res => {
           commit('setConnectedUser', res.data)
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         })
     },
     disconnectUser({ commit }) {
@@ -48,34 +48,10 @@ export default new Vuex.Store({
         .then(res => {
           commit("setPosts", res.data);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          // console.log(error);
         })
     },
-    likePost(res, payload) {
-      axios
-        .post("/posts/like", {
-          postId: payload.id,
-          userId: parseInt(this.state.userId),
-          likeValue: payload.likeValue
-        })
-        .then(() => {
-          this.dispatch('getPosts');
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    deletePost(res, payload) {
-      axios.delete("/posts/" + payload.id)
-        .then(res => {
-          console.log(res);
-          this.dispatch('getPosts');
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    }
   },
   modules: {
   }
